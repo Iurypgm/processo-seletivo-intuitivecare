@@ -1,0 +1,5 @@
+anexos/
+__pycache__/
+*.zip
+*.pyc
+.env
