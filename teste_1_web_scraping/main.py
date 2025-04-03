@@ -3,88 +3,42 @@ import requests
 from bs4 import BeautifulSoup
 from zipfile import ZipFile
 
+# URL base do site da ANS com os anexos
 BASE_URL = "https://www.gov.br/ans/pt-br/acesso-a-informacao/participacao-da-sociedade/atualizacao-do-rol-de-procedimentos"
-PDF_DIR = "anexos"
-ZIP_FILENAME = "anexos_comprimidos.zip"
 
-def criar_diretorio(destino):
-    os.makedirs(destino, exist_ok=True)
+# Caminhos base para salvar os arquivos
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+PDF_DIR = os.path.join(BASE_DIR, "anexos")
+ZIP_FILENAME = os.path.join(BASE_DIR, "anexos_comprimidos.zip")
 
-def obter_html(url):
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        return response.content
-    except requests.RequestException as e:
-        print(f"Erro ao acessar a página: {e}")
-        return None
+# Cria o diretório de anexos se ainda não existir
+os.makedirs(PDF_DIR, exist_ok=True)
 
-def extrair_links_pdfs(html):
-    soup = BeautifulSoup(html, 'html.parser')
-    pdf_links = []
+# Realiza requisição e parse do HTML da página
+response = requests.get(BASE_URL)
+soup = BeautifulSoup(response.content, 'html.parser')
 
-    for link in soup.find_all('a', href=True):
-        href = link['href']
-        texto = link.text.lower().replace(".", "").strip()
+# Filtra os links para os anexos I e II (em PDF)
+pdf_links = []
+for link in soup.find_all('a', href=True):
+    href = link['href']
+    texto = link.text.lower().replace(".", "")
+    if ("anexo i" in texto or "anexo ii" in texto) and href.endswith(".pdf"):
+        if not href.startswith("http"):
+            href = "https://www.gov.br" + href
+        pdf_links.append((texto.strip(), href))
 
-        if ("anexo i" in texto or "anexo ii" in texto) and href.endswith(".pdf"):
-            if not href.startswith("http"):
-                href = "https://www.gov.br" + href
-            pdf_links.append((texto, href))
+# Faz o download de cada PDF e salva em 'anexos/'
+pdf_paths = []
+for name, link in pdf_links:
+    filename = name.replace(" ", "_") + ".pdf"
+    filepath = os.path.join(PDF_DIR, filename)
+    response = requests.get(link)
+    with open(filepath, "wb") as f:
+        f.write(response.content)
+    pdf_paths.append(filepath)
 
-    return pdf_links
-
-def baixar_pdfs(pdf_links, destino):
-    caminhos = []
-
-    for nome, url in pdf_links:
-        filename = nome.replace(" ", "_") + ".pdf"
-        filepath = os.path.join(destino, filename)
-
-        if os.path.exists(filepath):
-            print(f"Já existe: {filename}, pulando download.")
-            caminhos.append(filepath)
-            continue
-
-        try:
-            response = requests.get(url)
-            response.raise_for_status()
-
-            with open(filepath, "wb") as f:
-                f.write(response.content)
-
-            print(f"Baixado: {filename}")
-            caminhos.append(filepath)
-
-        except requests.RequestException as e:
-            print(f"Erro ao baixar {filename}: {e}")
-
-    return caminhos
-
-def compactar_em_zip(caminhos, zip_nome):
-    try:
-        with ZipFile(zip_nome, "w") as zipf:
-            for file_path in caminhos:
-                zipf.write(file_path, os.path.basename(file_path))
-        print(f"Arquivos compactados com sucesso em: {zip_nome}")
-    except Exception as e:
-        print(f"Erro ao compactar arquivos: {e}")
-
-def main():
-    print("Iniciando processo de scraping e compactação...")
-    criar_diretorio(PDF_DIR)
-    html = obter_html(BASE_URL)
-    if not html:
-        return
-    pdf_links = extrair_links_pdfs(html)
-    if not pdf_links:
-        print("Nenhum PDF de Anexo I ou II encontrado.")
-        return
-    caminhos_pdfs = baixar_pdfs(pdf_links, PDF_DIR)
-    if caminhos_pdfs:
-        compactar_em_zip(caminhos_pdfs, ZIP_FILENAME)
-    else:
-        print("Nenhum arquivo foi baixado com sucesso.")
-
-if __name__ == "__main__":
-    main()
+# Compacta todos os PDFs baixados em um único arquivo ZIP
+with ZipFile(ZIP_FILENAME, "w") as zipf:
+    for file_path in pdf_paths:
+        zipf.write(file_path, os.path.basename(file_path))

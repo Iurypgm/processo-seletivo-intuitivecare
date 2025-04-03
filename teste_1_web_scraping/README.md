@@ -1,23 +1,11 @@
-# Teste 1 - Web Scraping (IntuitiveCare)
+# Teste 1 – Web Scraping
 
-Este script realiza web scraping no site da ANS para:
+Este script realiza as seguintes operações:
 
-1. Acessar a página de atualização do rol de procedimentos
-2. Baixar os Anexos I e II em PDF
-3. Compactar os arquivos em um único `.zip`
+1. Acessa a página oficial da ANS sobre Atualização do Rol de Procedimentos.
+2. Encontra e baixa os arquivos PDF do Anexo I e II.
+3. Salva os arquivos na pasta `anexos`.
+4. Compacta os dois arquivos em `anexos_comprimidos.zip`.
 
-## Como rodar
-
-Instale as dependências:
-
-```bash
-pip install -r requirements.txt
-```
-
-Execute o script:
-
-```bash
-python main.py
-```
-
-Os PDFs serão salvos na pasta `anexos/` e compactados no arquivo `anexos_comprimidos.zip`.
+> Linguagem utilizada: Python  
+> Bibliotecas principais: `requests`, `BeautifulSoup`, `zipfile`, `os`
