@@ -1,5 +1,12 @@
+# Teste 1 - Web Scraping
 requests
 beautifulsoup4
+
+# Teste 2 - PDF e manipulação de dados
 pdfplumber
 PyMuPDF
 pandas
+
+# Teste 4 - API com FastAPI
+fastapi
+uvicorn

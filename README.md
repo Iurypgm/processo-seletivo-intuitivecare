@@ -1,17 +1,16 @@
-
 # Processo Seletivo - IntuitiveCare
 
-Este repositório contém a resolução dos três testes propostos para o processo seletivo da IntuitiveCare.
+Este repositório contém a resolução completa dos quatro testes propostos para o processo seletivo da IntuitiveCare.
 
-## Estrutura do Projeto
+---
+
+## 📁 Estrutura do Projeto
 
 ```
 processo-seletivo-intuitivecare/
 ├── teste_1_web_scraping/
 │   ├── main.py
-│   ├── README.md
-│   └── anexos/
-│       └── anexo_i.pdf
+│   └── README.md
 ├── teste_2_transformacao_dados/
 │   ├── main.py
 │   ├── tabela_formatada.csv
@@ -19,49 +18,95 @@ processo-seletivo-intuitivecare/
 │   └── README.md
 ├── teste_3_banco_de_dados/
 │   ├── 01_create_tables.sql
-│   ├── 02_import_data.sql
+│   ├── 02_import_data_FINAL_LIMPO.sql
 │   ├── 03_consultas_analiticas.sql
-│   ├── README.md
-│   └── Arquivos/
-│       ├── Relatorio_cadop.csv
-│       ├── [8 arquivos trimestrais de demonstrativos].csv
+│   └── README.md
+├── teste_4_API/
+│   ├── backend/
+│   │   └── main.py
+│   ├── frontend/
+│   │   ├── index.html
+│   │   ├── vite.config.js
+│   │   └── src/
+│   │       ├── App.vue
+│   │       ├── main.js
+│   │       └── style.css
+│   ├── postman/
+│   │   └── Teste 4 - Busca Operadoras.postman_collection.json
+│   └── README.md
 ├── .gitignore
 ├── requirements.txt
 └── README.md  ← este arquivo
 ```
 
-## Testes
+---
 
-### ✅ Teste 1 - Web Scraping
-- Realiza o download do PDF de uma tabela da ANS com `requests` e `BeautifulSoup`.
-- Salva o arquivo em uma pasta específica para uso posterior.
+## ✅ Testes Realizados
 
-### ✅ Teste 2 - Transformação de Dados
-- Extrai tabelas de todas as páginas do PDF baixado no teste 1 usando `pdfplumber`.
-- Concatena e estrutura os dados em formato tabular (.csv).
-- Realiza a substituição das siglas das colunas OD e AMB com base na legenda presente no próprio PDF.
-- Remove quebras de linha e espaços duplicados.
-- Compacta o CSV original antes da substituição em um arquivo `.zip` com o nome `Teste_IuryMarques.zip`.
+### ✔️ Teste 1 – Web Scraping
 
-### ✅ Teste 3 - Banco de Dados (MySQL 8)
-- Estrutura e importa os dados dos arquivos de demonstrativos contábeis e operadoras da ANS.
-- Cria uma tabela auxiliar `demonstrativos_nao_importados` para armazenar registros com problemas de chave estrangeira.
-- Realiza tratamento e limpeza dos dados no momento da importação.
-- Implementa queries analíticas para:
-  - Listar as 10 operadoras com maiores despesas no último trimestre.
-  - Listar as 10 operadoras com maiores despesas no último ano.
+- Acessa a página da ANS para buscar os anexos em PDF (Anexo I e II).
+- Baixa e salva os arquivos na pasta `anexos/`.
+- Compacta ambos em `anexos_comprimidos.zip`.
 
-## Requisitos
+> Bibliotecas: `requests`, `BeautifulSoup`, `zipfile`, `os`
 
-Instale as dependências com:
+---
+
+### ✔️ Teste 2 – Transformação de Dados
+
+- Extrai todas as tabelas do PDF do Anexo I (a partir da página 3).
+- Remove cabeçalhos duplicados e quebras de linha.
+- Salva os dados estruturados em `tabela_formatada.csv`.
+- Compacta o `.csv` original (pré-tratamento) em `Teste_IuryMarques.zip`.
+- Reabre o CSV e aplica a legenda da ANS nas colunas OD e AMB (valores e cabeçalhos).
+
+> Bibliotecas: `pdfplumber`, `PyMuPDF`, `pandas`, `zipfile`
+
+---
+
+### ✔️ Teste 3 – Banco de Dados (MySQL 8)
+
+- Estrutura banco `intuitivecare_db` com três tabelas principais:
+  - `operadoras`, `demonstrativos`, `demonstrativos_nao_importados`
+- Importa e normaliza os dados da ANS (8 trimestres + cadastro das operadoras).
+- Aplica tratamento e validação no processo de importação.
+- Queries analíticas para:
+  - **TOP 10 operadoras com maiores despesas na categoria** `"EVENTOS/ SINISTROS CONHECIDOS OU AVISADOS DE ASSISTÊNCIA A SAÚDE MEDICO HOSPITALAR"` no último **trimestre** disponível
+  - **TOP 10 operadoras com maiores despesas** nessa mesma categoria considerando os **últimos 4 trimestres**
+
+> Observações:
+
+- A importação usa `LOAD DATA LOCAL INFILE`, com validação e limpeza.
+- Registros inconsistentes são armazenados separadamente para controle.
+
+---
+
+### ✔️ Teste 4 – API (Vue.js + FastAPI)
+
+- API com `FastAPI` para realizar buscas textuais no cadastro de operadoras.
+- Acesso via endpoint: `http://localhost:8000/operadoras`
+- Busca ocorre em todos os campos do CSV `Relatorio_cadop.csv` (Testes 3).
+- Frontend com `Vue 3` (via Vite) exibe resultados de forma dinâmica.
+- Collection do Postman incluída para facilitar testes de API.
+
+> Bibliotecas e tecnologias: `FastAPI`, `uvicorn`, `pandas`, `Vue.js`, `Vite`, `Postman`
+
+---
+
+## ⚙️ Requisitos
+
+Instale todas as dependências com:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-> As importações no teste 3 são feitas com `LOAD DATA LOCAL INFILE`, portanto certifique-se que a variável global `local_infile` está habilitada no seu servidor MySQL.
+> Para o Teste 3, certifique-se de habilitar a variável global `local_infile` no seu MySQL e ajustar o caminho dos arquivos `.csv` no script.
 
-## Desenvolvido por
+---
+
+## 👤 Desenvolvido por
 
 **Iury Marques**  
 [https://github.com/Iurypgm](https://github.com/Iurypgm)

@@ -1,7 +1,30 @@
+# Python
 __pycache__/
-*.pyc
-.DS_Store
+*.py[cod]
+*.pyo
+*.pyd
+venv/
 .env
-*.zip
-*.rar
+
+# Node (Vue frontend)
+node_modules/
+dist/
+*.log
+frontend/npm-debug.log*
+frontend/.env.*
+
+# System
+.DS_Store
+Thumbs.db
+
+# Arquivos CSV e ZIP gerados
 *.csv
+*.zip
+
+# IDEs
+.vscode/
+.idea/
+
+# Bytecode
+*.pyc
+*.pyo

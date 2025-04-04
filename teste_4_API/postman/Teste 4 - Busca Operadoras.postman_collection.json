@@ -1,0 +1,111 @@
+{
+	"info": {
+		"_postman_id": "d1c3d1fe-f441-4dd0-a153-f6787d259d80",
+		"name": "Teste 4 - Busca Operadoras",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43765296",
+		"_collection_link": "https://iurymarques.postman.co/workspace/Iury-Marques's-Workspace~76e67236-d51d-43ec-83e8-2703b9ed2c92/collection/43765296-d1c3d1fe-f441-4dd0-a153-f6787d259d80?action=share&source=collection_link&creator=43765296"
+	},
+	"item": [
+		{
+			"name": "amil",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/operadoras?q=amil",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"operadoras"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "amil"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "odontoprev",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/operadoras?q=odontoprev",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"operadoras"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "odontoprev"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "petro",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/operadoras?q=petro",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"operadoras"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "petro"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "12345678000195",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/operadoras?q=12345678000195",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"operadoras"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "12345678000195"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
